@@ -9,8 +9,8 @@ import * as ffi from "ffi";
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
-import * as util from "util";
 import { INodePlatform } from "./INodePlatform";
+const promisify = require('util.promisify');
 
 /**
  * ProofOfWork implementation using NodeJS.
@@ -60,7 +60,7 @@ export class ProofOfWorkNodeJs implements IProofOfWork {
             default: libFile += ".so";
         }
 
-        const stat = await util.promisify(this._nodePlatform.lstat)(libFile);
+        const stat = await promisify(this._nodePlatform.lstat)(libFile);
         if (stat.isFile()) {
             this._library = this._nodePlatform.loadLibrary(libFile, {
                 ccurl_pow: ["string", ["string", "int"]]
